@@ -3,6 +3,7 @@ Group Conv3D in Keras, also can be used as Depthwise Conv3D.
 
 group_multiplier: The number of convolution output channels for each group.
             The total number of output channels will be equal to `group_num * group_multiplier`.
+
 group_size: default 1, means depthwise Conv; bigger than 1, means group Conv; input channel num should be
     integral multiple of group_size.
 backend only suport tensorflow.
