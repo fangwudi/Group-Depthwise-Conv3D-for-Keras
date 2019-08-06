@@ -165,7 +165,7 @@ class GroupDepthwiseConv3D(Conv3D):
         self.input_dim = None
         self.kernel = None
         self.bias = None
-        self.grou_num = None
+        self.group_num = None
 
     def build(self, input_shape):
         if len(input_shape) < 5:
@@ -181,9 +181,9 @@ class GroupDepthwiseConv3D(Conv3D):
             raise ValueError('input channel num should be'
                              'integral multiple of group_size.')
 
-        self.grou_num = self.input_dim // self.group_size
+        self.group_num = self.input_dim // self.group_size
 
-        kernel_shape = (self.grou_num,
+        kernel_shape = (self.group_num,
                         self.kernel_size[0],
                         self.kernel_size[1],
                         self.kernel_size[2],
@@ -198,7 +198,7 @@ class GroupDepthwiseConv3D(Conv3D):
             constraint=self.group_depthwise_constraint)
 
         if self.use_bias:
-            self.bias = self.add_weight(shape=(self.grou_num * self.group_multiplier,),
+            self.bias = self.add_weight(shape=(self.group_num * self.group_multiplier,),
                                         initializer=self.bias_initializer,
                                         name='bias',
                                         regularizer=self.bias_regularizer,
@@ -217,7 +217,7 @@ class GroupDepthwiseConv3D(Conv3D):
         else:
             dilation = self.dilation_rate + (1,) + (1,)
 
-        inputs = tf.split(inputs[0], self.grou_num, axis=self.channel_axis)
+        inputs = tf.split(inputs[0], self.group_num, axis=self.channel_axis)
         outputs = tf.concat(
             [tf.nn.conv3d(inp, self.kernel[i, :, :, :, :, :],
                           strides=self._strides,
@@ -246,7 +246,7 @@ class GroupDepthwiseConv3D(Conv3D):
             rows = input_shape[2]
             cols = input_shape[3]
 
-        out_filters = self.grou_num * self.group_multiplier
+        out_filters = self.group_num * self.group_multiplier
 
         depth = conv_utils.conv_output_length(depth, self.kernel_size[0],
                                               self.padding,
