@@ -8,7 +8,7 @@ group_size: default 1, means depthwise Conv; bigger than 1, means group Conv; in
     integral multiple of group_size.
 backend only suport tensorflow.
 
-*Base code for the implementation is used from: https://github.com/alexandrosstergiou/keras-DepthwiseConv3D
+*Base code for the implementation is used from: https://github.com/alexandrosstergiou/keras-DepthwiseConv3D (his implementation is not exactly correct, but also thanks him for the contribution)
 
 
 
